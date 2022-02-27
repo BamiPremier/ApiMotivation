@@ -103,6 +103,11 @@ class Publication
      */
     private $partages;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Save::class, mappedBy="publication")
+     */
+    private $saves;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
@@ -111,6 +116,7 @@ class Publication
         $this->likes = new ArrayCollection();
         $this->partages = new ArrayCollection();
         $this->dateCreate = new \DateTime();
+        $this->saves = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -280,6 +286,36 @@ class Publication
             // set the owning side to null (unless already changed)
             if ($partage->getPublication() === $this) {
                 $partage->setPublication(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Save>
+     */
+    public function getSaves(): Collection
+    {
+        return $this->saves;
+    }
+
+    public function addSave(Save $save): self
+    {
+        if (!$this->saves->contains($save)) {
+            $this->saves[] = $save;
+            $save->setPublication($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSave(Save $save): self
+    {
+        if ($this->saves->removeElement($save)) {
+            // set the owning side to null (unless already changed)
+            if ($save->getPublication() === $this) {
+                $save->setPublication(null);
             }
         }
 

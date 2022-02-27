@@ -144,19 +144,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"read:user"})
      */
     private $likes;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity=Like::class, mappedBy="user")
-     * @Groups({"read:user"})
-     */
-    private $saves;
+ 
 
     /**
      * @ORM\OneToMany(targetEntity=Message::class, mappedBy="emetteur")
      *@Groups({"read:user",})
      */
     private $messages;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Save::class, mappedBy="user")
+     */
+    private $saves;
+
+    
 
 
     public function __construct()
@@ -170,9 +171,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->publications = new ArrayCollection();
         $this->abonnements = new ArrayCollection();
         $this->likes = new ArrayCollection();
-        $this->saves = new ArrayCollection();
+      
         $this->partages = new ArrayCollection();
         $this->messages = new ArrayCollection();
+        $this->publication = new ArrayCollection();
+        $this->saves = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -488,35 +491,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
 
-    /**
-     * @return Collection|Save[]
-     */
-    public function getSave(): Collection
-    {
-        return $this->likes;
-    }
-
-    public function addSave(Save $save): self
-    {
-        if (!$this->saves->contains($save)) {
-            $this->saves[] = $save;
-            $save->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSave(Save $save): self
-    {
-        if ($this->saves->removeElement($save)) {
-            // set the owning side to null (unless already changed)
-            if ($save->getUser() === $this) {
-                $save->setUser(null);
-            }
-        }
-
-        return $this;
-    }
+     
 
 
 
@@ -576,6 +551,44 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($message->getEmetteur() === $this) {
                 $message->setEmetteur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Save>
+     */
+    public function getPublication(): Collection
+    {
+        return $this->publication;
+    }
+
+    /**
+     * @return Collection<int, Save>
+     */
+    public function getSaves(): Collection
+    {
+        return $this->saves;
+    }
+
+    public function addSave(Save $save): self
+    {
+        if (!$this->saves->contains($save)) {
+            $this->saves[] = $save;
+            $save->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSave(Save $save): self
+    {
+        if ($this->saves->removeElement($save)) {
+            // set the owning side to null (unless already changed)
+            if ($save->getUser() === $this) {
+                $save->setUser(null);
             }
         }
 
