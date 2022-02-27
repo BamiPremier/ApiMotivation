@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          "patch"={
  *              "denormalization_context"={
  *                  "groups"={
- *                     "create:comment"
+ *                     "createj:comment"
  *                  }
  *              },
  *             },
