@@ -52,6 +52,7 @@ class Publication
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"create:pub","read:pub","read:comment","read:favory","read:like","read:partage"})
      */
     private $id;
 
@@ -107,6 +108,12 @@ class Publication
      * @ORM\OneToMany(targetEntity=Save::class, mappedBy="publication")
      */
     private $saves;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"create:pub","read:pub","read:comment","read:favory","read:like","read:partage"})
+     */
+    private $fontColor;
 
     public function __construct()
     {
@@ -318,6 +325,18 @@ class Publication
                 $save->setPublication(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFontColor(): ?string
+    {
+        return $this->fontColor;
+    }
+
+    public function setFontColor(?string $fontColor): self
+    {
+        $this->fontColor = $fontColor;
 
         return $this;
     }

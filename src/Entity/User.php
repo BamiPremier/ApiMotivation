@@ -59,12 +59,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     *  @Groups({"read:user","read:message","read:comment","read:favory","read:like","read:partage"})
+     *  @Groups({"read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub"})
      */
     private $id;
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage"})
+     * @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub"})
      */
     private $email;
 
@@ -82,19 +82,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     *  @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage"})
+     *  @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     *  @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage"})
+     *  @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub"})
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255,unique=true ,nullable=true)
-     *  @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage"})
+     *  @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub"})
      */
     private $numero;
 
@@ -144,7 +144,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"read:user"})
      */
     private $likes;
- 
+
 
     /**
      * @ORM\OneToMany(targetEntity=Message::class, mappedBy="emetteur")
@@ -157,7 +157,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $saves;
 
-    
+
 
 
     public function __construct()
@@ -171,7 +171,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->publications = new ArrayCollection();
         $this->abonnements = new ArrayCollection();
         $this->likes = new ArrayCollection();
-      
+
         $this->partages = new ArrayCollection();
         $this->messages = new ArrayCollection();
         $this->publication = new ArrayCollection();
@@ -491,7 +491,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
 
-     
+
 
 
 

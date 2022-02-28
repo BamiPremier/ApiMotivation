@@ -152,12 +152,12 @@ class Message
         return $this;
     }
 
-    public function getRecepteur(): ?user
+    public function getRecepteur(): ?User
     {
         return $this->recepteur;
     }
 
-    public function setRecepteur(?user $recepteur): self
+    public function setRecepteur(?User $recepteur): self
     {
         $this->recepteur = $recepteur;
 
