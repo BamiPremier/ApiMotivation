@@ -7,8 +7,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
-
 use Symfony\Component\Serializer\Annotation\Groups;
+
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\ExistsFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 
 /**
  * @ORM\Entity(repositoryClass=PublicationRepository::class)
@@ -45,6 +51,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          }
  * 
  * })
+ * 
+ * @ApiFilter(
+ *    SearchFilter::class, 
+ *    properties={ 
+ *      "id": "exact",
+ *      "user": "exact"
+ * }
+ *)
+ *
+ * 
+ * 
+ * 
  */
 class Publication
 {
@@ -52,19 +70,19 @@ class Publication
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"create:pub","read:pub","read:comment","read:favory","read:like","read:partage"})
+     * @Groups({"create:pub","read:pub","read:comment","read:favory","read:like","read:partage","read:Save"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"create:pub","read:pub","read:comment","read:favory","read:like","read:partage"})
+     * @Groups({"create:pub","read:pub","read:comment","read:favory","read:like","read:partage","read:Save"})
      */
     private $content;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"read:pub","read:comment","read:favory","read:like","read:partage"})
+     * @Groups({"read:pub","read:comment","read:favory","read:like","read:partage","read:Save"})
      */
     private $dateCreate;
 

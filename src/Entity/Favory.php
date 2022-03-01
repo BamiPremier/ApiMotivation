@@ -7,6 +7,14 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\ExistsFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+
 /**
  * @ORM\Entity(repositoryClass=FavoryRepository::class)
  * @ApiResource( itemOperations={
@@ -34,6 +42,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *           
  *          }
  * 
+ * }) 
+ * @ApiFilter(
+ *    SearchFilter::class, 
+ *    properties={ 
+ *      "id": "exact",
+ *   "user": "exact","publication": "exact",
+ * 
  * })
  */
 class Favory
@@ -54,7 +69,7 @@ class Favory
 
     /**
      * @ORM\ManyToOne(targetEntity=Publication::class, inversedBy="favories")
-      * @Groups({"create:favory","read:favory"})
+     * @Groups({"create:favory","read:favory"})
      */
     private $publication;
 

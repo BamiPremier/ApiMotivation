@@ -10,10 +10,14 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\UserCreateController;
-
+ 
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\ExistsFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -52,6 +56,20 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * }
  * 
  * )
+ * 
+ * @ApiFilter(
+ *    SearchFilter::class, 
+ *    properties={ 
+ *       "id": "exact",
+ *      "prenom": "exact",
+ *      "nom": "exact", 
+ *    "numero": "exact",
+ *    "email": "exact",
+ *    
+ * 
+ * 
+ * }
+ *)
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -59,12 +77,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     *  @Groups({"read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub"})
+     *  @Groups({"read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub","read:Save"})
      */
     private $id;
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub"})
+     * @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub","read:Save"})
      */
     private $email;
 
@@ -82,19 +100,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     *  @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub"})
+     *  @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub","read:Save"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     *  @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub"})
+     *  @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub","read:Save"})
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255,unique=true ,nullable=true)
-     *  @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub"})
+     *  @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub","read:Save"})
      */
     private $numero;
 

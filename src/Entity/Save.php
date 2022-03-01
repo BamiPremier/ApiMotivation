@@ -8,6 +8,13 @@ use ApiPlatform\Core\Annotation\ApiResource;
 
 use Symfony\Component\Serializer\Annotation\Groups;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\ExistsFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+
 /**
  * @ORM\Entity(repositoryClass=SaveRepository::class)
  * @ORM\Table(name="`Save`")
@@ -38,6 +45,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          }
  * 
  * })
+ *  
+ * @ApiFilter(
+ *    SearchFilter::class, 
+ *    properties={ 
+ *      "id": "exact",
+ *   "user": "exact","publication": "exact",
+ * 
+ * })
  */
 class Save
 {
@@ -56,13 +71,13 @@ class Save
     private $dateSave;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Publication::class, inversedBy="Saves") 
+     * @ORM\ManyToOne(targetEntity=Publication::class, inversedBy="saves") 
      * @Groups({"create:Save","read:Save"})
      */
     private $publication;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="Saves")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="saves")
      * 
      * @Groups({"create:Save","read:Save"})
      */
