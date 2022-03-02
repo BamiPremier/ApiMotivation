@@ -6,14 +6,14 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\UserCreateController;
- 
+
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\ExistsFilter;
@@ -77,12 +77,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     *  @Groups({"read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub","read:Save"})
+     * @Groups({"read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub","read:Save","read:abonnemnt"})
      */
     private $id;
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub","read:Save"})
+     * @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub","read:Save","read:abonnemnt"})
      */
     private $email;
 
@@ -100,19 +100,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     *  @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub","read:Save"})
+     *  @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub","read:Save","read:abonnemnt"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     *  @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub","read:Save"})
+     *  @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub","read:Save","read:abonnemnt"})
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255,unique=true ,nullable=true)
-     *  @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub","read:Save"})
+     *  @Groups({"create:user","read:user","read:message","read:comment","read:favory","read:like","read:partage","read:pub","read:Save","read:abonnemnt"})
      */
     private $numero;
 
@@ -175,6 +175,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $saves;
 
+    /**
+     * @ORM\JoinColumn(nullable=true)
+     * @ApiProperty(iri="http://schema.org/photo")
+     * @ORM\ManyToOne(targetEntity=UserObject::class)
+     * @Groups({"create:user", "read:user"})
+     */
+    private $photo;
+
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Abonnement::class, inversedBy="users")
+     * @Groups({"read:user"})
+     */
+    private $abonnes;
+
 
 
 
@@ -194,6 +210,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->messages = new ArrayCollection();
         $this->publication = new ArrayCollection();
         $this->saves = new ArrayCollection();
+        $this->abonnement = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -609,6 +626,38 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $save->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPhoto(): ?UserObject
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?UserObject $photo): self
+    {
+        $this->photo = $photo;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Abonnement>
+     */
+    public function getAbonnement(): Collection
+    {
+        return $this->abonnement;
+    }
+
+    public function getAbonnes(): ?Abonnement
+    {
+        return $this->abonnes;
+    }
+
+    public function setAbonnes(?Abonnement $abonnes): self
+    {
+        $this->abonnes = $abonnes;
 
         return $this;
     }

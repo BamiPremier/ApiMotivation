@@ -3,9 +3,17 @@
 namespace App\Entity;
 
 use App\Repository\AbonnementRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\ExistsFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 
 /**
  * @ORM\Entity(repositoryClass=AbonnementRepository::class)
@@ -31,6 +39,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          }
  * 
  * })
+ * 
+ * @ApiFilter(
+ *    SearchFilter::class, 
+ *    properties={ 
+ *       "id": "exact",
+ *      "user": "exact",
+ *     
+ * }
+ *)
  */
 class Abonnement
 {
@@ -53,10 +70,18 @@ class Abonnement
      * @Groups({"create:abonnemnt","read:abonnemnt"})
      */
     private $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="abonnes")
+     * @Groups({"create:abonnemnt","read:abonnemnt"})
+     */
+    private $users;
+
     public function __construct()
     {
 
         $this->dateAbonnement = new \DateTime();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -84,6 +109,36 @@ class Abonnement
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setAbonnes($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getAbonnes() === $this) {
+                $user->setAbonnes(null);
+            }
+        }
 
         return $this;
     }

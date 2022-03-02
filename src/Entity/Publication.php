@@ -70,19 +70,19 @@ class Publication
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"create:pub","read:pub","read:comment","read:favory","read:like","read:partage","read:Save"})
+     * @Groups({"create:pub","read:pub","read:comment","read:favory","read:like","read:partage","read:Save","read:category"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"create:pub","read:pub","read:comment","read:favory","read:like","read:partage","read:Save"})
+     * @Groups({"create:pub","read:pub","read:comment","read:favory","read:like","read:partage","read:Save","read:category"})
      */
     private $content;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"read:pub","read:comment","read:favory","read:like","read:partage","read:Save"})
+     * @Groups({"read:pub","read:comment","read:favory","read:like","read:partage","read:Save","read:category"})
      */
     private $dateCreate;
 
@@ -94,19 +94,19 @@ class Publication
 
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="publication")
-     * @Groups({"read:pub"})
+     * @Groups({"read:pub","read:category"})
      */
     private $comments;
 
     /**
      * @ORM\OneToMany(targetEntity=Like::class, mappedBy="publication")
-     * @Groups({"read:pub"})
+     * @Groups({"read:pub","read:category"})
      */
     private $likes;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="publications")
-     * @Groups({"create:pub", "read:pub"})
+     * @Groups({"create:pub", "read:pub","read:category"})
      */
     private $user;
 
@@ -129,9 +129,23 @@ class Publication
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"create:pub","read:pub","read:comment","read:favory","read:like","read:partage"})
+     * @Groups({"create:pub","read:pub","read:comment","read:favory","read:like","read:partage","read:category"})
      */
     private $fontColor;
+
+    /**
+     * @ORM\JoinColumn(nullable=true)
+     * @ApiProperty(iri="http://schema.org/publicationObjects")
+     * @ORM\ManyToOne(targetEntity=PublicationObject::class)
+     *  @Groups({"create:pub","read:pub","read:comment","read:favory","read:like","read:partage","read:category"})
+     */
+    private $publicationObjects;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="publications")
+     * @Groups({"create:pub","read:pub","read:comment","read:favory","read:like","read:partage","read:category"})
+     */
+    private $category;
 
     public function __construct()
     {
@@ -142,11 +156,23 @@ class Publication
         $this->partages = new ArrayCollection();
         $this->dateCreate = new \DateTime();
         $this->saves = new ArrayCollection();
+      
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+    public function getPublicationObjects():? PublicationObject
+    {
+        return $this->publicationObjects;
+    }
+
+    public function setPublicationObjects(?PublicationObject $publicationObjects): self
+    {
+        $this->publicationObjects = $publicationObjects;
+
+        return $this;
     }
 
     public function getContent(): ?string
@@ -355,6 +381,20 @@ class Publication
     public function setFontColor(?string $fontColor): self
     {
         $this->fontColor = $fontColor;
+
+        return $this;
+    }
+
+
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }
