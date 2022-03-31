@@ -14,15 +14,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Entity(repositoryClass=MessageRepository::class)
  * @ApiResource(
  *  itemOperations={
- *          "get"={},
+ *          "get"={ "security"="is_granted('IS_AUTHENTICATED_FULLY')"},
  *          "patch"={
  *              "denormalization_context"={
  *                  "groups"={
  *                     "modify:message"
  *                  }
- *              },
+ *              }, "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  *             },
- *          "delete"={}
+ *          "delete"={ "security"="is_granted('IS_AUTHENTICATED_FULLY')"}
  *     },
  * collectionOperations = { "get" = {
  * "normalization_context"={
@@ -30,7 +30,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                      "read:message"
  *                  }
  *              },
- * 
+ *  "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  * 
  * 
  * 
@@ -42,7 +42,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                  }
  *              },
  *            
- *           
+ *            "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  *          }
  * 
  * })

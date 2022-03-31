@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * 
  * 
  * itemOperations = { 
- *  "get"
+ *  "get"={ "security"="is_granted('IS_AUTHENTICATED_FULLY')"}
  * 
  * 
  * },collectionOperations = { "get" = {
@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                  "groups"={
  *                      "read:typepub"
  *                  }
- *              },
+ *              }, "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  * },
  * })
  */

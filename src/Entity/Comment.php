@@ -11,15 +11,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Entity(repositoryClass=CommentRepository::class)
  * @ApiResource( 
  * itemOperations={
- *          "get"={},
+ *          "get"={ "security"="is_granted('IS_AUTHENTICATED_FULLY')"},
  *          "patch"={
  *              "denormalization_context"={
  *                  "groups"={
  *                     "create:comment"
  *                  }
- *              },
+ *              }, "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  *             },
- *          "delete"={}
+ *          "delete"={ "security"="is_granted('IS_AUTHENTICATED_FULLY')"}
  *     },
  * collectionOperations = { "get" = {
  * "normalization_context"={
@@ -27,7 +27,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                      "read:comment"
  *                  }
  *              },
- * 
+ *  "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  * 
  * 
  * 
@@ -39,7 +39,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                  }
  *              },
  *            
- *           
+ *            "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  *          }
  * 
  * })

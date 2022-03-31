@@ -12,9 +12,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Entity(repositoryClass=LikeRepository::class)
  * @ORM\Table(name="`like`")
  *  @ApiResource( itemOperations={
- *          "get"={},
+ *          "get"={ "security"="is_granted('IS_AUTHENTICATED_FULLY')"},
  *         
- *          "delete"={}
+ *          "delete"={ "security"="is_granted('IS_AUTHENTICATED_FULLY')"}
  *     },
  * collectionOperations = { "get" = {
  * "normalization_context"={
@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *              },
  * 
  * 
- * 
+ *  "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  * 
  * },
  *    "post"={
@@ -34,7 +34,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                  }
  *              },
  *            
- *           
+ *            "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  *          }
  * 
  * })

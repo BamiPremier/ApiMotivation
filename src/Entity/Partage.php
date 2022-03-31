@@ -13,16 +13,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=PartageRepository::class)
  * @ApiResource( itemOperations={
- *          "get"={},
+ *          "get"={ "security"="is_granted('IS_AUTHENTICATED_FULLY')"},
  *          
- *          "delete"={}
+ *          "delete"={ "security"="is_granted('IS_AUTHENTICATED_FULLY')"}
  *     },
  * collectionOperations = { "get" = {
  * "normalization_context"={
  *                  "groups"={
  *                      "read:partage"
  *                  }
- *              },
+ *              }, "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  * },
  * "post"={
  *              "denormalization_context"={
@@ -30,7 +30,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                      "create:partage"
  *                  }
  *              },
- *            
+ *             "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  *           
  *          }
  * })

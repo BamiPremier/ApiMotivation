@@ -43,7 +43,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                  "groups"={
  *                      "read:user"
  *                  }
- *   }
+ *   }, "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  * },
  *    "post" = {
  *          "denormalization_context"={
@@ -89,7 +89,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    private $roles = ["ROLE_USER"];
 
     /**
      * @var string The hashed password
@@ -179,7 +179,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\JoinColumn(nullable=true)
      * @ApiProperty(iri="http://schema.org/photo")
      * @ORM\ManyToOne(targetEntity=UserObject::class)
-     * @Groups({"create:user", "read:user"})
+     * @Groups({"read:user","create:user"})
      */
     private $photo;
 
@@ -237,7 +237,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string) $this->numero;
     }
 
     /**
@@ -245,7 +245,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->numero;
     }
 
     /**
@@ -597,7 +597,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getPublication(): Collection
     {
-        return $this->publication;
+        return $this->publications;
     }
 
     /**
@@ -647,7 +647,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getAbonnement(): Collection
     {
-        return $this->abonnement;
+        return $this->abonnements;
     }
 
     public function getAbonnes(): ?Abonnement

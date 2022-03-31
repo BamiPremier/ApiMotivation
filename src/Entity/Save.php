@@ -19,9 +19,9 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
  * @ORM\Entity(repositoryClass=SaveRepository::class)
  * @ORM\Table(name="`Save`")
  *  @ApiResource( itemOperations={
- *          "get"={},
+ *          "get"={ "security"="is_granted('IS_AUTHENTICATED_FULLY')"},
  *         
- *          "delete"={}
+ *          "delete"={ "security"="is_granted('IS_AUTHENTICATED_FULLY')"}
  *     },
  * collectionOperations = { "get" = {
  * "normalization_context"={
@@ -30,8 +30,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
  *                  }
  *              },
  * 
- * 
- * 
+ *  "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  * 
  * },
  *    "post"={
@@ -40,7 +39,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
  *                      "create:Save"
  *                  }
  *              },
- *            
+ *             "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  *           
  *          }
  * 

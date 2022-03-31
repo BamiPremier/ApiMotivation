@@ -17,6 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  * "normalization_context"={
  *                 
  *              },
+ * "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  * },
  * 
  * })

@@ -15,39 +15,27 @@ use App\Repository\PublicationObjectRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ *  @ORM\Entity(repositoryClass=PublicationObjectRepository::class)
  * @ApiResource(
- *     iri="http://schema.org/publicationObject",
+ *     iri="http://schema.org/PublicationObject",
  *     normalizationContext={
- *         "groups"={"publication_object_read"}
+ *         "groups"={"read:pubObject"}
  *     },
- *     collectionOperations={
- *         "post"={
- *             "controller"=CreatePublicationObjectAction::class,
- *             "deserialize"=false,
- *             "validation_groups"={"Default", "publication_object_create"},
- *             "openapi_context"={
- *                 "requestBody"={
- *                     "content"={
- *                         "multipart/form-data"={
- *                             "schema"={
- *                                 "type"="object",
- *                                 "properties"={
- *                                     "file"={
- *                                         "type"="string",
- *                                         "format"="binary"
- *                                     }
- *                                 }
- *                             }
- *                         }
- *                     }
- *                 }
- *             },
+ *     collectionOperations={  
+ *         "post"={  
+ * "controller"=CreatePublicationObjectAction::class,
+ *  "deserialize"=false,
+ * "denormalization_context"={
+ *                  "groups"={
+ *                      "create:pubObject"
+ *                  }
+ *              },
+ *               "input_formats"={
+ *                  "multipart"={ "multipart/form-data" }
+ *              },
+ *            
  *              "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"
  *         },
- *         "get"={
- *              "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"
- *          }
  *     },
  *     itemOperations={
  *         "get"={
@@ -66,18 +54,19 @@ class PublicationObject
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"publication_object_read",  "read:pub"})
+     * @Groups({"read:pubObject",  "read:pub"})
      */
     private ?int $id = null;
 
     /**
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"publication_object_read",  "read:pub" })
+     * @Groups({"read:pubObject","read:pub" })
      */
     public ?string $contentUrl = null;
 
     /**
-     * @Assert\NotNull(groups={"publication_object_create"})
+     * @Assert\NotNull(groups={"create:pubObject"})
+     * @Groups({"create:pubObject"})
      * @Vich\UploadableField(mapping="publication_object", fileNameProperty="filePath")
      */
     public ?File $file = null;
@@ -87,10 +76,17 @@ class PublicationObject
      */
     public ?string $filePath = null;
 
+     
+
+    
+
 
 
     public function getId(): ?int
     {
         return $this->id;
     }
+
+     
+
 }

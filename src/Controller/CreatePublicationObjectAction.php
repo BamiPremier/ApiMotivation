@@ -20,9 +20,9 @@ final class CreatePublicationObjectAction extends AbstractController
             throw new BadRequestHttpException('"file" is required');
         }
 
-        // dd($uploadedFile);
         $PublicationObject = new PublicationObject();
         $PublicationObject->file = $uploadedFile;
+        // $PublicationObject->setPublication();
         // dd($PublicationObject);
         return $PublicationObject;
     }

@@ -18,8 +18,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 /**
  * @ORM\Entity(repositoryClass=FavoryRepository::class)
  * @ApiResource( itemOperations={
- *          "get"={}, 
- *          "delete"={}
+ *          "get"={ "security"="is_granted('IS_AUTHENTICATED_FULLY')"}, 
+ *          "delete"={ "security"="is_granted('IS_AUTHENTICATED_FULLY')"}
  *     },
  * collectionOperations = { "get" = {
  * "normalization_context"={
@@ -27,7 +27,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
  *                      "read:favory"
  *                  }
  *              },
- * 
+ *  "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  * 
  * 
  * 
@@ -39,7 +39,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
  *                  }
  *              },
  *            
- *           
+ *            "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  *          }
  * 
  * }) 

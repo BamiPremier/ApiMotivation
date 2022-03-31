@@ -18,16 +18,18 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 
 /**
  * @ORM\Entity(repositoryClass=PublicationRepository::class)
- * @ApiResource( itemOperations={
- *          "get"={},
+ * @ApiResource(
+ *   iri="http://schema.org/Publication",
+ *  itemOperations={
+ *          "get"={ "security"="is_granted('IS_AUTHENTICATED_FULLY')"},
  *          "patch"={
  *              "denormalization_context"={
  *                  "groups"={
  *                     "create:pub"
  *                  }
- *              },
+ *              }, "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  *             },
- *          "delete"={}
+ *          "delete"={ "security"="is_granted('IS_AUTHENTICATED_FULLY')"}
  *     },
  * collectionOperations = { "get" = {
  * "normalization_context"={
@@ -36,7 +38,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
  *                  }
  *              },
  * 
- * 
+ *  "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  * 
  * 
  * },
@@ -47,7 +49,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
  *                  }
  *              },
  *            
- *           
+ *            "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  *          }
  * 
  * })
@@ -70,12 +72,12 @@ class Publication
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"create:pub","read:pub","read:comment","read:favory","read:like","read:partage","read:Save","read:category"})
+     * @Groups({"create:pub","publication_object_read","read:pub","read:comment","read:favory","read:like","read:partage","read:Save","read:category"})
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"create:pub","read:pub","read:comment","read:favory","read:like","read:partage","read:Save","read:category"})
      */
     private $content;
@@ -132,20 +134,22 @@ class Publication
      * @Groups({"create:pub","read:pub","read:comment","read:favory","read:like","read:partage","read:category"})
      */
     private $fontColor;
-
-    /**
-     * @ORM\JoinColumn(nullable=true)
-     * @ApiProperty(iri="http://schema.org/publicationObjects")
-     * @ORM\ManyToOne(targetEntity=PublicationObject::class)
-     *  @Groups({"create:pub","read:pub","read:comment","read:favory","read:like","read:partage","read:category"})
-     */
-    private $publicationObjects;
-
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="publications")
      * @Groups({"create:pub","read:pub","read:comment","read:favory","read:like","read:partage","read:category"})
      */
     private $category;
+
+    /**
+     * @ORM\JoinColumn(nullable=true)
+     * @ApiProperty(iri="http://schema.org/publicationObject")
+     * @ORM\ManyToOne(targetEntity=PublicationObject::class)
+     * @Groups({"read:pub","create:pub"})
+     */
+    private $publicationObject;
+
+
+
 
     public function __construct()
     {
@@ -156,23 +160,11 @@ class Publication
         $this->partages = new ArrayCollection();
         $this->dateCreate = new \DateTime();
         $this->saves = new ArrayCollection();
-      
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-    public function getPublicationObjects():? PublicationObject
-    {
-        return $this->publicationObjects;
-    }
-
-    public function setPublicationObjects(?PublicationObject $publicationObjects): self
-    {
-        $this->publicationObjects = $publicationObjects;
-
-        return $this;
     }
 
     public function getContent(): ?string
@@ -395,6 +387,18 @@ class Publication
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getPublicationObject(): ?PublicationObject
+    {
+        return $this->publicationObject;
+    }
+
+    public function setPublicationObject(?PublicationObject $publicationObject): self
+    {
+        $this->publicationObject = $publicationObject;
 
         return $this;
     }
